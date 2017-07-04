@@ -1,4 +1,6 @@
 # Doctrine nullable embeddables
+[![Build Status](https://travis-ci.org/fmasa/doctrine-nullable-embeddables.svg?branch=master)](https://travis-ci.org/fmasa/doctrine-nullable-embeddables)
+[![Coverage Status](https://coveralls.io/repos/github/fmasa/doctrine-nullable-embeddables/badge.svg?branch=master)](https://coveralls.io/github/fmasa/doctrine-nullable-embeddables?branch=master)
 
 ## Installation
 The best way to install fmasa/doctrine-yaml-annotations is using [Composer](https://getcomposer.org/):
