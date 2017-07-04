@@ -12,7 +12,7 @@ use Fmasa\DoctrineNullableEmbeddables\Annotations\Nullable;
 use ReflectionClass;
 
 
-class Listener implements EventSubscriber
+class Subscriber implements EventSubscriber
 {
 
     /** @var EntityManagerInterface */
