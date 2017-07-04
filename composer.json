@@ -1,0 +1,26 @@
+{
+    "name": "fmasa/doctrine-nullable-embeddables",
+    "description": "Mechanism for nullable embeddables in Doctrine 2.5+",
+    "type": "library",
+    "require": {
+        "php": "^7.0",
+        "doctrine/orm": "^2.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.0",
+        "satooshi/php-coveralls": "^1.0",
+        "phpunit/phpcov": "^4.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "František Maša",
+            "email": "frantisekmasa1@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Fmasa\\": "src/"
+        }
+    }
+}
