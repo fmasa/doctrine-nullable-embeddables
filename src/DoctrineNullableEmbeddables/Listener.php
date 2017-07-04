@@ -8,6 +8,7 @@ use Doctrine\Common\Persistence\Proxy;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Fmasa\DoctrineNullableEmbeddables\Annotations\Nullable;
 use ReflectionClass;
 
 class Listener implements EventSubscriber
@@ -58,7 +59,7 @@ class Listener implements EventSubscriber
 
                 $annotation = $this->reader->getPropertyAnnotation(
                     $metadata->getReflectionProperty($field),
-                    NullableAnnotation::class
+                    Nullable::class
                     );
 
                 if ($annotation !== NULL) {

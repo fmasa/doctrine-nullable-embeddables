@@ -25,7 +25,7 @@ class NullableEmbeddablesTest extends TestCase
 		$driver = $config->newDefaultAnnotationDriver([__DIR__ . "/stubs"], FALSE);
 		$annorationReader = $driver->getReader();
 		$config->setMetadataDriverImpl($driver);
-		AnnotationRegistry::registerFile(__DIR__ . '/../src/DoctrineNullableEmbeddables/NullableAnnotation.php');
+		AnnotationRegistry::registerFile(__DIR__ . '/../src/DoctrineNullableEmbeddables/Annotations/Nullable.php');
 
 		$connection = [
 			'driver' => 'pdo_sqlite',
