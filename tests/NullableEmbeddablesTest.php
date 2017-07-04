@@ -2,12 +2,12 @@
 
 namespace Fmasa\DoctrineNullableEmbeddables;
 
-
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\Setup;
 use PHPUnit\Framework\TestCase;
+
 
 class NullableEmbeddablesTest extends TestCase
 {
@@ -52,6 +52,7 @@ class NullableEmbeddablesTest extends TestCase
 		$this->assertNull($entity->getEmbeddable());
 	}
 
+
 	public function testSimpleNotNullEmbeddable()
 	{
 		$this->generateSchema([\SimpleEntity::class]);
@@ -67,6 +68,7 @@ class NullableEmbeddablesTest extends TestCase
 		$this->assertEquals($embeddable, $entity->getEmbeddable());
 	}
 
+
 	public function testNestedNullEmbeddable()
 	{
 		$this->generateSchema([\EntityWithNestedEmbeddable::class]);
@@ -80,6 +82,7 @@ class NullableEmbeddablesTest extends TestCase
 
 		$this->assertNull($entity->getEmbeddable());
 	}
+
 
 	public function testNestedNotNullEmbeddable()
 	{
@@ -95,6 +98,7 @@ class NullableEmbeddablesTest extends TestCase
 
 		$this->assertEquals($embeddable, $entity->getEmbeddable());
 	}
+
 
 	/**
 	 * @param string[] $entities

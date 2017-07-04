@@ -11,6 +11,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Fmasa\DoctrineNullableEmbeddables\Annotations\Nullable;
 use ReflectionClass;
 
+
 class Listener implements EventSubscriber
 {
 
@@ -26,16 +27,19 @@ class Listener implements EventSubscriber
     /** @var Reader */
     private $reader;
 
+
     public function getSubscribedEvents(): array
     {
         return ['postLoad'];
     }
+
 
     public function __construct(EntityManagerInterface $entityManager, Reader $reader)
     {
         $this->entityManager = $entityManager;
         $this->reader = $reader;
     }
+
 
     private function getNullableEmbeddables(ClassMetadata $metadata, $prefix = NULL): array
     {
@@ -72,6 +76,7 @@ class Listener implements EventSubscriber
         return $this->embeddablesTree[$metadata->getName()];
     }
 
+
     private function getReflection(string $class): ReflectionClass
     {
         if (!isset($this->reflections[$class])) {
@@ -79,6 +84,7 @@ class Listener implements EventSubscriber
         }
         return $this->reflections[$class];
     }
+
 
     private function clearEmbeddableIfNecessary($object, string $field): void
     {
@@ -102,6 +108,7 @@ class Listener implements EventSubscriber
         }
     }
 
+
     public function postLoad(LifecycleEventArgs $args): void
     {
         $object = $args->getObject();
@@ -112,6 +119,7 @@ class Listener implements EventSubscriber
             $this->clearEmbeddableIfNecessary($object, $embeddable);
         }
     }
+
 
     private function isEmpty($object): bool
     {

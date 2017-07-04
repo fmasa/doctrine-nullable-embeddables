@@ -3,6 +3,7 @@
 use Doctrine\ORM\Mapping as ORM;
 use Fmasa\DoctrineNullableEmbeddables\Annotations\Nullable;
 
+
 /**
  * @ORM\Embeddable
  */
@@ -28,6 +29,7 @@ class NestedEmbeddable
 		$this->string = $string;
 		$this->embeddable = $embeddable;
 	}
+
 
 	/**
 	 * @return Embeddable|NULL

@@ -3,6 +3,7 @@
 use Doctrine\ORM\Mapping as ORM;
 use Fmasa\DoctrineNullableEmbeddables\Annotations\Nullable;
 
+
 /**
  * @ORM\Entity()
  */
