@@ -86,7 +86,7 @@ class Subscriber implements EventSubscriber
     }
 
 
-    private function clearEmbeddableIfNecessary($object, string $field): void
+    private function clearEmbeddableIfNecessary($object, string $field)
     {
         if (!$object || $object instanceof Proxy) {
             return;
@@ -109,7 +109,7 @@ class Subscriber implements EventSubscriber
     }
 
 
-    public function postLoad(LifecycleEventArgs $args): void
+    public function postLoad(LifecycleEventArgs $args)
     {
         $object = $args->getObject();
         $className = get_class($object);
