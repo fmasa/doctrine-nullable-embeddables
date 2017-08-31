@@ -22,16 +22,14 @@ class SubscriberTest extends TestCase
 		$this->subscriber = new Subscriber(new AnnotationReader());
 	}
 
-
 	public function testSimpleNullEmbeddable()
 	{
-		$entity = new \SimpleEntity(new \Embeddable(NULL, NULL));
+		$entity = new \SimpleEntity(new \Embeddable(null, null));
 
 		$this->callPostLoad($entity);
 
 		$this->assertNull($entity->getEmbeddable());
 	}
-
 
 	public function testSimpleNotNullEmbeddable()
 	{
@@ -43,13 +41,12 @@ class SubscriberTest extends TestCase
 		$this->assertEquals($embeddable, $entity->getEmbeddable());
 	}
 
-
 	public function testNestedNullEmbeddable()
 	{
 		$entity = new \EntityWithNestedEmbeddable(
 			new \NestedEmbeddable(
-				NULL,
-				new \Embeddable(NULL, NULL)
+				null,
+				new \Embeddable(null, null)
 			)
 		);
 
@@ -57,7 +54,6 @@ class SubscriberTest extends TestCase
 
 		$this->assertNull($entity->getEmbeddable());
 	}
-
 
 	public function testNestedNotNullEmbeddable()
 	{
@@ -69,16 +65,14 @@ class SubscriberTest extends TestCase
 		$this->assertEquals($embeddable, $entity->getEmbeddable());
 	}
 
-
 	public function testPartialyLoadedEntity()
 	{
-		$entity = new \SimpleEntity(NULL);
+		$entity = new \SimpleEntity(null);
 
 		$this->callPostLoad($entity);
 
 		$this->assertNull($entity->getEmbeddable());
 	}
-
 
 	public function callPostLoad($entity)
 	{

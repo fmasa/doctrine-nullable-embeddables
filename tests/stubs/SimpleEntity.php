@@ -19,19 +19,18 @@ class SimpleEntity
 	/**
 	 * @ORM\Embedded(class="Embeddable")
 	 * @Nullable
-	 * @var Embeddable|NULL
+	 * @var Embeddable|null
 	 */
 	private $embeddable;
 
 
-	public function __construct(Embeddable $embeddable = NULL)
+	public function __construct(Embeddable $embeddable = null)
 	{
 		$this->embeddable = $embeddable;
 	}
 
-
 	/**
-	 * @return Embeddable|NULL
+	 * @return Embeddable|null
 	 */
 	public function getEmbeddable()
 	{

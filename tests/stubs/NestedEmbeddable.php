@@ -19,20 +19,19 @@ class NestedEmbeddable
 	/**
 	 * @ORM\Embedded(class="Embeddable")
 	 * @Nullable
-	 * @var Embeddable|NULL
+	 * @var Embeddable|null
 	 */
 	private $embeddable;
 
 
-	public function __construct(string $string = NULL, Embeddable $embeddable = NULL)
+	public function __construct(string $string = null, Embeddable $embeddable = null)
 	{
 		$this->string = $string;
 		$this->embeddable = $embeddable;
 	}
 
-
 	/**
-	 * @return Embeddable|NULL
+	 * @return Embeddable|null
 	 */
 	public function getEmbeddable()
 	{

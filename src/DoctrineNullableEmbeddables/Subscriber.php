@@ -25,32 +25,31 @@ class Subscriber implements EventSubscriber
     private $reader;
 
 
-    public function getSubscribedEvents(): array
-    {
-        return ['postLoad'];
-    }
-
-
     public function __construct(Reader $reader)
     {
         $this->reader = $reader;
     }
 
+	public function getSubscribedEvents(): array
+	{
+		return ['postLoad'];
+	}
 
     private function getNullableEmbeddables(
     	ClassMetadata $metadata,
 		EntityManager $entityManager,
-		$prefix = NULL): array
+		$prefix = null
+	): array
     {
         if (!isset($this->embeddablesTree[$metadata->getName()])) {
             $nullables = [];
             foreach ($metadata->embeddedClasses as $field => $embeddable) {
 
-                if(strpos($field, ".") !== FALSE) {
+                if(strpos($field, ".") !== false) {
                     continue;
                 }
 
-                $prefixedField = $prefix !== NULL ? $prefix . '.' . $field : $field;
+                $prefixedField = $prefix !== null ? $prefix . '.' . $field : $field;
 
                 $nullables = array_merge(
                     $nullables,
@@ -66,7 +65,7 @@ class Subscriber implements EventSubscriber
                     Nullable::class
                     );
 
-                if ($annotation !== NULL) {
+                if ($annotation !== null) {
                     $nullables[] = $prefixedField;
                 }
             }
@@ -76,7 +75,6 @@ class Subscriber implements EventSubscriber
         return $this->embeddablesTree[$metadata->getName()];
     }
 
-
     private function getReflection(string $class): ReflectionClass
     {
         if (!isset($this->reflections[$class])) {
@@ -85,10 +83,9 @@ class Subscriber implements EventSubscriber
         return $this->reflections[$class];
     }
 
-
     private function clearEmbeddableIfNecessary($object, string $field)
     {
-        if ($object === NULL || $object instanceof Proxy) {
+        if ($object === null || $object instanceof Proxy) {
             return;
         }
 
@@ -96,18 +93,17 @@ class Subscriber implements EventSubscriber
 
         $reflection = $this->getReflection(get_class($object));
 
-        $property = $reflection->getProperty($nested === FALSE ? $field : substr($field, 0, $nested));
-        $property->setAccessible(TRUE);
+        $property = $reflection->getProperty($nested === false ? $field : substr($field, 0, $nested));
+        $property->setAccessible(true);
 
-        if ($nested === FALSE) {
+        if ($nested === false) {
             if ($this->isEmpty($property->getValue($object))) {
-                $property->setValue($object, NULL);
+                $property->setValue($object, null);
             }
         } else {
             $this->clearEmbeddableIfNecessary($property->getValue($object), substr($field, $nested + 1));
         }
     }
-
 
     public function postLoad(LifecycleEventArgs $args)
     {
@@ -121,13 +117,12 @@ class Subscriber implements EventSubscriber
         }
     }
 
-
     private function isEmpty($object): bool
     {
         if (empty($object)) {
-            return TRUE;
+            return true;
         } elseif (is_numeric($object)) {
-            return FALSE;
+            return false;
         } elseif (is_string($object)) {
             return !strlen(trim($object));
         }
@@ -135,11 +130,11 @@ class Subscriber implements EventSubscriber
         // It's an object or array!
         foreach ((array)$object as $element) {
             if (!$this->isEmpty($element)) {
-                return FALSE;
+                return false;
             }
         }
 
-        return TRUE;
+        return true;
     }
 
 }

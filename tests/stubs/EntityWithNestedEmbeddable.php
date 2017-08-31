@@ -19,19 +19,18 @@ class EntityWithNestedEmbeddable
 	/**
 	 * @ORM\Embedded(class="NestedEmbeddable")
 	 * @Nullable
-	 * @var NestedEmbeddable|NULL
+	 * @var NestedEmbeddable|null
 	 */
 	private $embeddable;
 
 
-	public function __construct(NestedEmbeddable $embeddable = NULL)
+	public function __construct(NestedEmbeddable $embeddable = null)
 	{
 		$this->embeddable = $embeddable;
 	}
 
-
 	/**
-	 * @return NestedEmbeddable|NULL
+	 * @return NestedEmbeddable|null
 	 */
 	public function getEmbeddable()
 	{

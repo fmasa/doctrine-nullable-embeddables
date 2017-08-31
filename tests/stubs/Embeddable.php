@@ -20,7 +20,7 @@ class Embeddable
 	private $int;
 
 
-	public function __construct(string $string = NULL, int $int = NULL)
+	public function __construct(string $string = null, int $int = null)
 	{
 		$this->string = $string;
 		$this->int = $int;
