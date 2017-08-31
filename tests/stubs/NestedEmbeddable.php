@@ -24,7 +24,7 @@ class NestedEmbeddable
 	private $embeddable;
 
 
-	public function __construct($string, Embeddable $embeddable = NULL)
+	public function __construct(string $string = NULL, Embeddable $embeddable = NULL)
 	{
 		$this->string = $string;
 		$this->embeddable = $embeddable;
