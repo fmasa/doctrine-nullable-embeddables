@@ -13,11 +13,10 @@ There are several conditions that has to be met:
 
 Now all you have to do is register `Fmasa\DoctrineNullableEmbeddables\Subscriber` and you have nullable embeddables working:
 ```php
-/* @var $evm Doctrine\Common\EventManager */
 /* @var $annotationReader Doctrine\Common\Annotations\Reader */
 /* @var $em Doctrine\ORM\EntityManager */
 
-$evm->addEventSubscriber(new Fmasa\DoctrineNullableEmbeddables\Subscriber($em, $annorationReader));
+$evm->addEventSubscriber(new Fmasa\DoctrineNullableEmbeddables\Subscriber($annorationReader));
 ```
 
 ### But I'm using YAML for mapping!

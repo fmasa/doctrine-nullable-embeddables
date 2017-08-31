@@ -5,7 +5,7 @@ namespace Fmasa\DoctrineNullableEmbeddables;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Proxy;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Fmasa\DoctrineNullableEmbeddables\Annotations\Nullable;
@@ -14,9 +14,6 @@ use ReflectionClass;
 
 class Subscriber implements EventSubscriber
 {
-
-    /** @var EntityManagerInterface */
-    private $entityManager;
 
     /** @var string[] */
     private $embeddablesTree = [];
@@ -34,14 +31,16 @@ class Subscriber implements EventSubscriber
     }
 
 
-    public function __construct(EntityManagerInterface $entityManager, Reader $reader)
+    public function __construct(Reader $reader)
     {
-        $this->entityManager = $entityManager;
         $this->reader = $reader;
     }
 
 
-    private function getNullableEmbeddables(ClassMetadata $metadata, $prefix = NULL): array
+    private function getNullableEmbeddables(
+    	ClassMetadata $metadata,
+		EntityManager $entityManager,
+		$prefix = NULL): array
     {
         if (!isset($this->embeddablesTree[$metadata->getName()])) {
             $nullables = [];
@@ -56,7 +55,8 @@ class Subscriber implements EventSubscriber
                 $nullables = array_merge(
                     $nullables,
                     $this->getNullableEmbeddables(
-                        $this->entityManager->getClassMetadata($embeddable['class']),
+                        $entityManager->getClassMetadata($embeddable['class']),
+						$entityManager,
                         $prefixedField
                     )
                 );
@@ -113,9 +113,10 @@ class Subscriber implements EventSubscriber
     {
         $object = $args->getObject();
         $className = get_class($object);
-        $metadata = $this->entityManager->getClassMetadata($className);
+        $entityManager = $args->getEntityManager();
+        $metadata = $entityManager->getClassMetadata($className);
 
-        foreach ($this->getNullableEmbeddables($metadata) as $embeddable) {
+        foreach ($this->getNullableEmbeddables($metadata, $entityManager) as $embeddable) {
             $this->clearEmbeddableIfNecessary($object, $embeddable);
         }
     }

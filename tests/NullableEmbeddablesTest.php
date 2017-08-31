@@ -33,7 +33,7 @@ class NullableEmbeddablesTest extends TestCase
 		];
 
 		$this->entityManager = $em = EntityManager::create($connection, $config);
-		$em->getEventManager()->addEventSubscriber(new Subscriber($em, $annorationReader));
+		$em->getEventManager()->addEventSubscriber(new Subscriber($annorationReader));
 		$this->schema = new SchemaTool($em);
 		$this->schema->dropDatabase();
 	}
