@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Fmasa\DoctrineNullableEmbeddables\Annotations\Nullable;
-use ReflectionClass;
 
 
 class Subscriber implements EventSubscriber
@@ -17,9 +16,6 @@ class Subscriber implements EventSubscriber
 
     /** @var string[] */
     private $embeddablesTree = [];
-
-    /** @var ReflectionClass[] */
-    private $reflections = [];
 
     /** @var Reader */
     private $reader;
@@ -75,15 +71,11 @@ class Subscriber implements EventSubscriber
         return $this->embeddablesTree[$metadata->getName()];
     }
 
-    private function getReflection(string $class): ReflectionClass
-    {
-        if (!isset($this->reflections[$class])) {
-            $this->reflections[$class] = new ReflectionClass($class);
-        }
-        return $this->reflections[$class];
-    }
-
-    private function clearEmbeddableIfNecessary($object, string $field)
+    private function clearEmbeddableIfNecessary(
+    	$object,
+		string $field,
+		EntityManager $entityManager
+	)
     {
         if ($object === null || $object instanceof Proxy) {
             return;
@@ -91,9 +83,8 @@ class Subscriber implements EventSubscriber
 
         $nested = strpos($field, '.');
 
-        $reflection = $this->getReflection(get_class($object));
-
-        $property = $reflection->getProperty($nested === false ? $field : substr($field, 0, $nested));
+        $baseField = $nested === false ? $field : substr($field, 0, $nested);
+        $property = $entityManager->getClassMetadata(get_class($object))->getReflectionProperty($baseField);
         $property->setAccessible(true);
 
         if ($nested === false) {
@@ -101,7 +92,11 @@ class Subscriber implements EventSubscriber
                 $property->setValue($object, null);
             }
         } else {
-            $this->clearEmbeddableIfNecessary($property->getValue($object), substr($field, $nested + 1));
+            $this->clearEmbeddableIfNecessary(
+            	$property->getValue($object),
+				substr($field, $nested + 1),
+				$entityManager
+			);
         }
     }
 
@@ -113,7 +108,7 @@ class Subscriber implements EventSubscriber
         $metadata = $entityManager->getClassMetadata($className);
 
         foreach ($this->getNullableEmbeddables($metadata, $entityManager) as $embeddable) {
-            $this->clearEmbeddableIfNecessary($object, $embeddable);
+            $this->clearEmbeddableIfNecessary($object, $embeddable, $entityManager);
         }
     }
 
