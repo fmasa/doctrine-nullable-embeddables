@@ -88,7 +88,7 @@ class Subscriber implements EventSubscriber
 
     private function clearEmbeddableIfNecessary($object, string $field)
     {
-        if (!$object || $object instanceof Proxy) {
+        if ($object === NULL || $object instanceof Proxy) {
             return;
         }
 
