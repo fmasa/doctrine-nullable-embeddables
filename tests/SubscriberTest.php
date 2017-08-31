@@ -70,6 +70,16 @@ class SubscriberTest extends TestCase
 	}
 
 
+	public function testPartialyLoadedEntity()
+	{
+		$entity = new \SimpleEntity(NULL);
+
+		$this->callPostLoad($entity);
+
+		$this->assertNull($entity->getEmbeddable());
+	}
+
+
 	public function callPostLoad($entity)
 	{
 		$connectionParameters = [
