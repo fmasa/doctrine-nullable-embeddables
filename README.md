@@ -16,7 +16,7 @@ Now all you have to do is register `Fmasa\DoctrineNullableEmbeddables\Subscriber
 /* @var $annotationReader Doctrine\Common\Annotations\Reader */
 /* @var $em Doctrine\ORM\EntityManager */
 
-$evm->addEventSubscriber(new Fmasa\DoctrineNullableEmbeddables\Subscriber($annorationReader));
+$evm->addEventSubscriber(new Fmasa\DoctrineNullableEmbeddables\Subscriber($annotationReader));
 ```
 
 ### But I'm using YAML for mapping!
