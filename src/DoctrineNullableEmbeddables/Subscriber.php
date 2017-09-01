@@ -14,9 +14,6 @@ use Fmasa\DoctrineNullableEmbeddables\Annotations\Nullable;
 class Subscriber implements EventSubscriber
 {
 
-    /** @var string[] */
-    private $embeddablesTree = [];
-
     /** @var Reader */
     private $reader;
 
@@ -31,105 +28,66 @@ class Subscriber implements EventSubscriber
 		return ['postLoad'];
 	}
 
-    private function getNullableEmbeddables(
-    	ClassMetadata $metadata,
-		EntityManager $entityManager,
-		$prefix = null
-	): array
-    {
-        if (!isset($this->embeddablesTree[$metadata->getName()])) {
-            $nullables = [];
-            foreach ($metadata->embeddedClasses as $field => $embeddable) {
-
-                if(strpos($field, ".") !== false) {
-                    continue;
-                }
-
-                $prefixedField = $prefix !== null ? $prefix . '.' . $field : $field;
-
-                $nullables = array_merge(
-                    $nullables,
-                    $this->getNullableEmbeddables(
-                        $entityManager->getClassMetadata($embeddable['class']),
-						$entityManager,
-                        $prefixedField
-                    )
-                );
-
-                $annotation = $this->reader->getPropertyAnnotation(
-                    $metadata->getReflectionProperty($field),
-                    Nullable::class
-                    );
-
-                if ($annotation !== null) {
-                    $nullables[] = $prefixedField;
-                }
-            }
-            $this->embeddablesTree[$metadata->getName()] = $nullables;
-        }
-
-        return $this->embeddablesTree[$metadata->getName()];
-    }
-
-    private function clearEmbeddableIfNecessary(
+    private function clearEmbeddablesIfNecessary(
     	$object,
-		string $field,
 		EntityManager $entityManager
 	)
     {
-        if ($object === null || $object instanceof Proxy) {
-            return;
-        }
+        $metadata = $entityManager->getClassMetadata(get_class($object));
 
-        $nested = strpos($field, '.');
+        foreach($metadata->embeddedClasses as $fieldName => $embeddable) {
+        	if(strpos($fieldName, '.') !== false) {
+        		continue;
+			}
 
-        $baseField = $nested === false ? $field : substr($field, 0, $nested);
-        $property = $entityManager->getClassMetadata(get_class($object))->getReflectionProperty($baseField);
-        $property->setAccessible(true);
+			$field = $metadata->getReflectionProperty($fieldName);
+			$value = $field->getValue($object);
 
-        if ($nested === false) {
-            if ($this->isEmpty($property->getValue($object))) {
-                $property->setValue($object, null);
-            }
-        } else {
-            $this->clearEmbeddableIfNecessary(
-            	$property->getValue($object),
-				substr($field, $nested + 1),
-				$entityManager
-			);
-        }
+			if($value === null) {
+				continue;
+			}
+
+        	if($this->hasNullableAnnotation($field)) {
+				$this->clearEmbeddablesIfNecessary(
+					$value,
+					$entityManager
+				);
+
+				if($this->isEmpty($value, $entityManager->getClassMetadata($embeddable['class']))) {
+					$field->setValue($object, null);
+				}
+			}
+		}
     }
 
     public function postLoad(LifecycleEventArgs $args)
     {
-        $object = $args->getObject();
-        $className = get_class($object);
-        $entityManager = $args->getEntityManager();
-        $metadata = $entityManager->getClassMetadata($className);
+    	$object = $args->getObject();
 
-        foreach ($this->getNullableEmbeddables($metadata, $entityManager) as $embeddable) {
-            $this->clearEmbeddableIfNecessary($object, $embeddable, $entityManager);
-        }
+    	if($object instanceof Proxy) {
+    		return;
+		}
+
+        $this->clearEmbeddablesIfNecessary(
+        	$args->getObject(),
+			$args->getEntityManager()
+		);
     }
 
-    private function isEmpty($object): bool
+    private function isEmpty($object, ClassMetadata $metadata): bool
     {
-        if (empty($object)) {
-            return true;
-        } elseif (is_numeric($object)) {
-            return false;
-        } elseif (is_string($object)) {
-            return !strlen(trim($object));
-        }
+    	foreach($metadata->getFieldNames() as $fieldName) {
+    		if($metadata->getFieldValue($object, $fieldName) !== null) {
+    			return false;
+			}
+		}
 
-        // It's an object or array!
-        foreach ((array)$object as $element) {
-            if (!$this->isEmpty($element)) {
-                return false;
-            }
-        }
-
-        return true;
+		return true;
     }
+
+    private function hasNullableAnnotation(\ReflectionProperty $property): bool
+	{
+		return $this->reader->getPropertyAnnotation($property, Nullable::class) !== NULL;
+	}
 
 }
