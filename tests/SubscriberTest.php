@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Fmasa\DoctrineNullableEmbeddables;
 
 use Doctrine\Common\Annotations\AnnotationReader;

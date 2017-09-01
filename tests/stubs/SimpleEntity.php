@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Fmasa\DoctrineNullableEmbeddables\Annotations\Nullable;
 use Doctrine\ORM\Mapping as ORM;
 
