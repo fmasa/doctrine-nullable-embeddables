@@ -2,6 +2,9 @@
 [![Build Status](https://travis-ci.org/fmasa/doctrine-nullable-embeddables.svg?branch=master)](https://travis-ci.org/fmasa/doctrine-nullable-embeddables)
 [![Coverage Status](https://coveralls.io/repos/github/fmasa/doctrine-nullable-embeddables/badge.svg?branch=master)](https://coveralls.io/github/fmasa/doctrine-nullable-embeddables?branch=master)
 
+This package serves as workaround for Doctrine's lack of support of nullable embeddables due to implementation of embeddables in Doctrine 2.5+
+For more informations about the issue see [doctrine/doctrine2](https://github.com/doctrine/doctrine2/issues/4568).
+
 ## Installation
 The best way to install fmasa/doctrine-yaml-annotations is using [Composer](https://getcomposer.org/):
 
