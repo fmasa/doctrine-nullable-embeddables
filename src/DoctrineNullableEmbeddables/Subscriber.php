@@ -28,10 +28,7 @@ class Subscriber implements EventSubscriber
 		return ['postLoad'];
 	}
 
-    private function clearEmbeddablesIfNecessary(
-    	$object,
-		EntityManager $entityManager
-	)
+    private function clearEmbeddablesIfNecessary($object, EntityManager $entityManager)
     {
         $metadata = $entityManager->getClassMetadata(get_class($object));
 
@@ -69,7 +66,7 @@ class Subscriber implements EventSubscriber
 		}
 
         $this->clearEmbeddablesIfNecessary(
-        	$args->getObject(),
+        	$object,
 			$args->getEntityManager()
 		);
     }
@@ -87,7 +84,7 @@ class Subscriber implements EventSubscriber
 
     private function hasNullableAnnotation(\ReflectionProperty $property): bool
 	{
-		return $this->reader->getPropertyAnnotation($property, Nullable::class) !== NULL;
+		return $this->reader->getPropertyAnnotation($property, Nullable::class) !== null;
 	}
 
 }
