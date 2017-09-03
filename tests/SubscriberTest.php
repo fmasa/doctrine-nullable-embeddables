@@ -76,6 +76,16 @@ class SubscriberTest extends TestCase
 		$this->assertNull($entity->getEmbeddable());
 	}
 
+	public function testProxyClassIsSkipped()
+	{
+		$embeddable = new \Embeddable(null, null);
+		$entity = new \SimpleEntityProxy($embeddable);
+
+		$this->callPostLoad($entity);
+
+		$this->assertSame($embeddable, $embeddable);
+	}
+
 	public function callPostLoad($entity)
 	{
 		$connectionParameters = [
