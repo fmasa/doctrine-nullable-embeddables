@@ -11,7 +11,8 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Fmasa\DoctrineNullableEmbeddables\Annotations\Nullable;
-
+use function get_class;
+use function strpos;
 
 class Subscriber implements EventSubscriber
 {
